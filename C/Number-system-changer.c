@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <conio.h>
 unsigned long long int deci_to_bai(unsigned long long int num)
 {
     unsigned long long int result = 0;
@@ -133,4 +134,5 @@ void main()
         }
         break;
     }
+    getch();
 }
