@@ -7,10 +7,10 @@ FILE *file;
 struct data
 {
     int sr;
-    char name[10];
+    char name[15];
     long long int phone_number;
 } d;
-int chack()
+int check()
 {
     int i = 0;
     file = fopen("file.txt", "r");
@@ -26,10 +26,14 @@ void ch1()
     int i = 1;
     clrscr();
     file = fopen("file.txt", "r");
-    printf("Sr no.\t\tName\t\tNumber\n");
     while (fread(&d, 1, sizeof(struct data), file))
     {
-        printf("\n%d\t\t%s\t\t%lld", i, d.name, d.phone_number);
+        printf("\n%d.  Name:- %s",i,d.name);
+        for (int j = 1; j <=19-strlen(d.name); j++)
+        {
+            printf(" ");
+        }
+        printf("Phone:- %lld",d.phone_number);
         i++;
     }
     fclose(file);
@@ -93,21 +97,22 @@ void ch7()
     {
     case 1:
         clrscr();
-        fflush(stdin);
-        printf("Enter Name:- ");
-        gets(str);
-        file = fopen("file.txt", "r");
-        while (fread(&d, sizeof(struct data), 1, file))
-        {
-            if (d.name != str)
-            {
-            }
-            else
-            {
-                printf("\n\nYour Data = %s\t%lld", d.name, d.phone_number);
-            }
-        }
-        fclose(file);
+        printf("Here is a bug i will solve it soon....");
+        // fflush(stdin);
+        // printf("Enter Name:- ");
+        // gets(str);
+        // file = fopen("file.txt", "r");
+        // while (fread(&d, sizeof(struct data), 1, file))
+        // {
+        //     if (d.name != str)
+        //     {
+        //     }
+        //     else
+        //     {
+        //         printf("\n\nYour Data = %s\t%lld", d.name, d.phone_number);
+        //     }
+        // }
+        // fclose(file);
         break;
     case 2:
         clrscr();
@@ -186,7 +191,7 @@ menu:
         break;
     case 8:
         clrscr();
-        printf("Total Contact= %d\n\n", chack());
+        printf("Total Contact= %d\n\n", check());
         goto back;
         break;
     case 9:
