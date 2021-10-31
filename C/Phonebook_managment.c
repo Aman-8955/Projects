@@ -6,10 +6,14 @@
 FILE *file;
 struct data
 {
-    int sr;
     char name[15];
     long long int phone_number;
 } d;
+struct temp_data
+{
+    char temp_name[15];
+    long long int temp_number;
+} temp_d;
 int check()
 {
     int i = 0;
@@ -28,12 +32,12 @@ void ch1()
     file = fopen("file.txt", "r");
     while (fread(&d, 1, sizeof(struct data), file))
     {
-        printf("\n%d.  Name:- %s",i,d.name);
-        for (int j = 1; j <=19-strlen(d.name); j++)
+        printf("\n%d.  Name:- %s", i, d.name);
+        for (int j = 1; j <= 19 - strlen(d.name); j++)
         {
             printf(" ");
         }
-        printf("Phone:- %lld",d.phone_number);
+        printf("Phone:- %lld", d.phone_number);
         i++;
     }
     fclose(file);
@@ -75,6 +79,52 @@ void ch3()
 }
 void ch4()
 {
+    int a = 0, d_choice;
+    long long int d_number;
+    FILE *file2;
+    clrscr();
+    printf("Enter number which number you want to delete:- ");
+    scanf("%lld", &d_number);
+    file = fopen("file.txt", "r+");
+    file2 = fopen("temp.txt", "w+");
+    while (fread(&d, 1, sizeof(struct data), file))
+    {
+        if (d_number == d.phone_number)
+        {
+            printf("Your number which you want to delete:- \n\n");
+            printf("%s\t%lld", d.name, d.phone_number);
+            a = 1;
+        }
+    }
+    if (a == 0)
+    {
+        printf("\n\nNumber is not founded......");
+    }
+    if (a == 1)
+    {
+        printf("\n\nAre your sure to delete this number:\n[1]Sure[2]No\n");
+        scanf("%d", &d_choice);
+        if (d_choice == 1)
+        {
+            fclose(file);
+            file = fopen("file.txt", "r+");
+            while (fread(&d, 1, sizeof(struct data), file))
+            {
+                if (d_number != d.phone_number)
+                {
+                    strcpy(temp_d.temp_name, d.name);
+                    temp_d.temp_number = d.phone_number;
+                    fwrite(&temp_d, 1, sizeof(struct temp_data), file2);
+                }
+            }
+            clrscr();
+            printf("Number has deleted.......");
+        }
+    }
+    fclose(file);
+    fclose(file2);
+    remove("file.txt");
+    rename("temp.txt", "file.txt");
 }
 void ch5()
 {
@@ -83,9 +133,61 @@ void ch5()
     fclose(file);
     printf("All Data Deleted......");
 }
+void ch6()
+{
+
+    int a = 0;
+    long long int d_number;
+    FILE *file2;
+    clrscr();
+    printf("Enter number which number you want to edit:- ");
+    scanf("%lld", &d_number);
+    file = fopen("file.txt", "r+");
+    file2 = fopen("temp.txt", "w+");
+    while (fread(&d, 1, sizeof(struct data), file))
+    {
+        if (d_number == d.phone_number)
+        {
+            printf("Your number which you want to edit:- \n\n");
+            printf("%s\t%lld", d.name, d.phone_number);
+            a = 1;
+        }
+    }
+    if (a == 0)
+    {
+        printf("\n\nNumber is not founded......");
+    }
+    if (a == 1)
+    {
+        fclose(file);
+        file = fopen("file.txt", "r+");
+        while (fread(&d, 1, sizeof(struct data), file))
+        {
+            if (d_number != d.phone_number)
+            {
+                strcpy(temp_d.temp_name, d.name);
+                temp_d.temp_number = d.phone_number;
+                fwrite(&temp_d, 1, sizeof(struct temp_data), file2);
+            }
+        }
+    }
+    fclose(file);
+    fclose(file2);
+    remove("file.txt");
+    rename("temp.txt", "file.txt");
+    printf("\n\nEnter your new details \nEnter Name:- ");
+    fflush(stdin);
+    gets(d.name);
+    printf("Enter Number:- ");
+    scanf("%lld", &d.phone_number);
+    file = fopen("file.txt", "a+");
+    fwrite(&d, 1, sizeof(struct data), file);
+    fclose(file);
+    printf("Data Saved......\n");
+}
 void ch7()
 {
-    int choice;
+    int choice, extra = 0;
     long long int number;
     char str[10];
     clrscr();
@@ -97,22 +199,23 @@ void ch7()
     {
     case 1:
         clrscr();
-        printf("Here is a bug i will solve it soon....");
-        // fflush(stdin);
-        // printf("Enter Name:- ");
-        // gets(str);
-        // file = fopen("file.txt", "r");
-        // while (fread(&d, sizeof(struct data), 1, file))
-        // {
-        //     if (d.name != str)
-        //     {
-        //     }
-        //     else
-        //     {
-        //         printf("\n\nYour Data = %s\t%lld", d.name, d.phone_number);
-        //     }
-        // }
-        // fclose(file);
+        fflush(stdin);
+        printf("Enter Name:- ");
+        gets(str);
+        file = fopen("file.txt", "r");
+        while (fread(&d, sizeof(struct data), 1, file))
+        {
+            if (strcmp(str, d.name) == 0)
+            {
+                printf("\nYour Data = %s\t%lld", d.name, d.phone_number);
+                extra = 1;
+            }
+        }
+        if (extra == 0)
+        {
+            printf("\nData not founded....");
+        }
+        fclose(file);
         break;
     case 2:
         clrscr();
@@ -123,8 +226,13 @@ void ch7()
         {
             if (d.phone_number == number)
             {
-                printf("\n\nYour Data = %s\t%lld", d.name, d.phone_number);
+                printf("\nYour Data = %s\t%lld", d.name, d.phone_number);
+                extra = 1;
             }
+        }
+        if (extra == 0)
+        {
+            printf("\nData not founded....");
         }
         fclose(file);
         break;
@@ -178,12 +286,17 @@ menu:
         goto back;
         break;
     case 4:
+        ch4();
+        def();
+        goto back;
         break;
     case 5:
         ch5();
         goto back;
         break;
     case 6:
+        ch6();
+        goto back;
         break;
     case 7:
         ch7();
@@ -223,5 +336,4 @@ menu:
 
         break;
     }
-    // getch();
 }
